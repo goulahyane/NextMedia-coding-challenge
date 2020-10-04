@@ -1,0 +1,39 @@
+version: '3'
+services:
+  #Master Ansible
+  master:
+      build: master/
+      working_dir: /root/playbooks
+      volumes:
+        - ${PWD}/playbooks:/root/playbooks
+        - ${PWD}/config:/etc/ansible
+      command: tail -f /dev/null
+      networks:
+         - challenge
+      restart: always
+  
+
+  # Node1 
+  node1:
+      build: node/
+      networks:
+         - challenge
+      restart: always
+      
+  # Node2
+  node2:
+      build: node/
+      networks:
+          - challenge
+      restart: always
+
+  # Node3
+  node3:
+      build: node/
+      networks:
+          - challenge
+      restart: always
+
+networks:
+    challenge:
+        driver: bridge
