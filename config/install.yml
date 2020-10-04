@@ -167,3 +167,14 @@
       service:
         name: logstash
         state: started
+
+#installing nginx on web instance
+- hosts: web
+  tasks:
+    - name: Install Nginx Latest Version
+      apt: name=nginx state=latest
+    
+    - name: Starting nginx
+      service:
+          name: nginx
+          state: started
