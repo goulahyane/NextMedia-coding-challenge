@@ -62,7 +62,6 @@
       service:
         name: elasticsearch
         state: started
-
 #intalling Kibana on node1
 - hosts: elastic
   gather_facts: no
@@ -104,3 +103,21 @@
       service:
         name: kibana
         state: started
+
+#installing JAVA on node2
+- hosts: logstash
+  gather_facts: yes
+  
+  pre_tasks:
+    - name: update apt cache if needed
+      become: yes
+      apt:
+        update_cache=yes
+        cache_valid_time=3600
+
+  tasks:
+    - name: Install Java Runtime Environment
+      become: yes
+      apt:
+       name: default-jre
+       state: present
