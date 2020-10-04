@@ -121,3 +121,49 @@
       apt:
        name: default-jre
        state: present
+
+#installing logstash on node2
+- hosts: logstash
+  gather_facts: no
+
+  tasks:
+    - name: Download Logstash Deb Package
+      get_url:
+        url: https://artifacts.elastic.co/downloads/logstash/logstash-7.8.1.deb
+        dest: /tmp
+
+    - name: Install Logstash Deb Package
+      become: yes
+      apt:
+        deb: /tmp/logstash-7.8.1.deb
+
+    - name: Create Logstash Pipeline File
+      become: yes
+      file:
+         path: /etc/logstash/conf.d/main.conf
+         state: touch
+
+    - name: Add Logstash Pipeline Configuration
+      become: yes
+      blockinfile:
+         path: /etc/logstash/conf.d/main.conf
+         marker: ""
+         block: |
+           input {
+             beats {
+               port => 5044
+             }
+           }
+           output {
+             elasticsearch { hosts => ["node1:9200"]
+             }
+           }
+    - name: creating logstash service
+      command: /usr/share/logstash/bin/system-install /etc/logstash/startup.options sysv 
+
+    # Enable Logstash service
+    - name: Start logstash Service
+      become: yes
+      service:
+        name: logstash
+        state: started
