@@ -42,7 +42,7 @@ dc exec master bash
 cd /etc/ansible/ && ansible-playbook install.yml
 ```
 
-I suppose the communication check had been done using 
+I suppose the communication check has been done using:
 ```
 ansible all -m ping 
 ```
