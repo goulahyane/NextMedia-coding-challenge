@@ -1,3 +1,9 @@
+[cluster]
+node4
+node5
+node6
+
+
 [elastic]
 node1
 
@@ -7,13 +13,14 @@ node2
 [web]
 node3
 
-[test1]
+[master1]
 node4
 
-[test2]
+[master2]
 node5
-node6
 
+[master3]
+node6
 
 [all:vars]
 ansible_user=root

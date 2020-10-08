@@ -41,7 +41,7 @@
       become: yes
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
-        regexp: '#node.name: '
+        regexp: 'node.namel'
         line: 'node.name: master-1'
 
     - name: Updating Elastic Config (Node role)
@@ -99,7 +99,7 @@
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
         regexp: 'discovery.seed_hosts'
-        line: 'discovery.seed_hosts: ["172.19.0.2", "172.19.0.6 ", "172.19.0.7"]'
+        line: 'discovery.seed_hosts: ["node4", "node5", "node6"]'
 
     - name: Updating master nodes
       become: yes
@@ -202,7 +202,7 @@
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
         regexp: 'discovery.seed_hosts'
-        line: 'discovery.seed_hosts: ["172.19.0.2", "172.19.0.6 ", "172.19.0.7"]'
+        line: 'discovery.seed_hosts: ["node4", "node5", "node6"]'
 
     - name: Updating master nodes
       become: yes
@@ -219,7 +219,7 @@
         state: started
 
 #installing Elasticsearch on test master3
-- hosts: master1
+- hosts: master3
   gather_facts: no
 
   tasks:
@@ -302,7 +302,7 @@
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
         regexp: 'discovery.seed_hosts'
-        line: 'discovery.seed_hosts: ["172.19.0.2", "172.19.0.6 ", "172.19.0.7"]'
+        line: 'discovery.seed_hosts: ["node4", "node5", "node6"]'
 
     - name: Updating master nodes
       become: yes
