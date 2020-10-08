@@ -1,0 +1,319 @@
+#installing JAVA on node1
+- hosts: cluster
+  gather_facts: yes
+
+  pre_tasks:
+    - name: update apt cache if needed
+      become: yes
+      apt:
+        update_cache=yes
+        cache_valid_time=3600
+
+  tasks:
+    - name: Install Java Runtime Environment
+      become: yes
+      apt:
+       name: default-jre
+       state: present
+#installing Elasticsearch on test master1
+- hosts: master1
+  gather_facts: no
+
+  tasks:
+    - name: Download Elastic Deb Package
+      get_url:
+        url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.1-amd64.deb
+        dest: /tmp
+
+    - name: Install Elastic Deb Package
+      become: yes
+      apt:
+        deb: /tmp/elasticsearch-7.8.1-amd64.deb
+
+    - name: Updating Cluster Name
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'cluster.name'
+        line: 'cluster.name: Es_test_cluster'
+    
+    - name: Updating Elastic Config (Node Name)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: '#node.name: '
+        line: 'node.name: master-1'
+
+    - name: Updating Elastic Config (Node role)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'node.master'
+        line: 'node.master: true'
+
+    - name: Updating Elastic Config (Node role)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'node.data'
+        line: 'node.data: true'
+
+    - name: Update Elastic Config
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'network.host'
+        line: 'network.host: 0.0.0.0'
+
+    - name: Updating Elastic Config (Port Number)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'http.port'
+        line: 'http.port: 9200'
+   
+    - name: Updating Elastic Config (TCP Port)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'transport.tcp.port'
+        line: 'transport.tcp.port: 9300'    
+    
+    - name: Updating Elastic Config (TCP Port)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'path.data'
+        line: 'path.data: /var/lib/elasticsearch'    
+    
+    - name: Updating Elastic Config (TCP Port)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'path.logs'
+        line: 'path.logs: /var/log/elasticsearch'    
+    
+
+    - name: Update hosts config
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'discovery.seed_hosts'
+        line: 'discovery.seed_hosts: ["172.19.0.2", "172.19.0.6 ", "172.19.0.7"]'
+
+    - name: Updating master nodes
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'discovery.zen.minimum_master_nodes'
+        line: 'cluster.initial_master_nodes: ["master-1","master-2"]'
+
+
+    - name: Start ElasticSearch Service
+      become: yes
+      service:
+        name: elasticsearch
+        state: started
+
+#installing Kibana on test master2
+
+#installing Elasticsearch on test master2
+- hosts: master2
+  gather_facts: no
+
+  tasks:
+    - name: Download Elastic Deb Package
+      get_url:
+        url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.1-amd64.deb
+        dest: /tmp
+
+    - name: Install Elastic Deb Package
+      become: yes
+      apt:
+        deb: /tmp/elasticsearch-7.8.1-amd64.deb
+
+    - name: Updating Cluster Name
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'cluster.name'
+        line: 'cluster.name: Es_test_cluster'
+    
+    - name: Updating Elastic Config (Node Name)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: '#node.name: '
+        line: 'node.name: master-2'
+
+    - name: Updating Elastic Config (Node role)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'node.master'
+        line: 'node.master: true'
+
+    - name: Updating Elastic Config (Node role)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'node.data'
+        line: 'node.data: true'
+
+    - name: Update Elastic Config
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'network.host'
+        line: 'network.host: 0.0.0.0'
+
+    - name: Updating Elastic Config (Port Number)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'http.port'
+        line: 'http.port: 9200'
+   
+    - name: Updating Elastic Config (TCP Port)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'transport.tcp.port'
+        line: 'transport.tcp.port: 9300'    
+    
+    - name: Updating Elastic Config (TCP Port)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'path.data'
+        line: 'path.data: /var/lib/elasticsearch'    
+
+    
+    - name: Updating Elastic Config (TCP Port)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'path.logs'
+        line: 'path.logs: /var/log/elasticsearch'    
+    
+
+    - name: Update hosts config
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'discovery.seed_hosts'
+        line: 'discovery.seed_hosts: ["172.19.0.2", "172.19.0.6 ", "172.19.0.7"]'
+
+    - name: Updating master nodes
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'discovery.zen.minimum_master_nodes'
+        line: 'cluster.initial_master_nodes: ["master-1","master-2"]'
+
+
+    - name: Start ElasticSearch Service
+      become: yes
+      service:
+        name: elasticsearch
+        state: started
+
+#installing Elasticsearch on test master3
+- hosts: master1
+  gather_facts: no
+
+  tasks:
+    - name: Download Elastic Deb Package
+      get_url:
+        url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.1-amd64.deb
+        dest: /tmp
+
+    - name: Install Elastic Deb Package
+      become: yes
+      apt:
+        deb: /tmp/elasticsearch-7.8.1-amd64.deb
+
+    - name: Updating Cluster Name
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'cluster.name'
+        line: 'cluster.name: Es_test_cluster'
+    
+    - name: Updating Elastic Config (Node Name)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: '#node.name: '
+        line: 'node.name: master-3'
+
+    - name: Updating Elastic Config (Node role)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'node.master'
+        line: 'node.master: true'
+
+    - name: Updating Elastic Config (Node role)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'node.data'
+        line: 'node.data: true'
+
+    - name: Update Elastic Config
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'network.host'
+        line: 'network.host: 0.0.0.0'
+
+    - name: Updating Elastic Config (Port Number)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'http.port'
+        line: 'http.port: 9200'
+   
+    - name: Updating Elastic Config (TCP Port)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'transport.tcp.port'
+        line: 'transport.tcp.port: 9300'    
+    
+    - name: Updating Elastic Config (TCP Port)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'path.data'
+        line: 'path.data: /var/lib/elasticsearch'    
+    
+    - name: Updating Elastic Config (TCP Port)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'path.data'
+        line: 'path.data: /var/lib/elasticsearch'    
+    
+
+    - name: Update hosts config
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'discovery.seed_hosts'
+        line: 'discovery.seed_hosts: ["172.19.0.2", "172.19.0.6 ", "172.19.0.7"]'
+
+    - name: Updating master nodes
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'discovery.zen.minimum_master_nodes'
+        line: 'cluster.initial_master_nodes: ["master-1","master-2"]'
+
+
+    - name: Start ElasticSearch Service
+      become: yes
+      service:
+        name: elasticsearch
+        state: started
