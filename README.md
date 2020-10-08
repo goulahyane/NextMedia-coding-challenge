@@ -1,7 +1,7 @@
 # NextMedia-coding-challenge
 This repo has been made in order to participate to the coding challenge by NextMedia for DevOps Engineer application
 
-## Infrastructure Preparing
+## Infrastructure Preparing 6 instances (3 Dev instances - 3 test instances) 
 
 1- First of all clone the repo using 
 ```
@@ -47,5 +47,34 @@ I suppose the communication check has been done using:
 ansible all -m ping 
 ```
 
+Waiting for the installation to be done, and check the installation once done, using:
+```
+curl node1:9200 && curl node3
+```
+You can also check on your local brower by groing to:
+```
+http://localhost:5601 (Kibana)
+
+http://localhost (Nginx)
+```
+
+## Test Environnement 
+
+In the ansible Master insntance, under the ``` /etc/ansible/ ``` a plybook called ``` install_2.yml ``` for ELK cluster installation
 
 
+
+1- Connect to the ansible Master instance 
+```
+dc exec master bash
+```
+
+2- Run the playbook
+```
+ansible-playbook /etc/config/install_2.yml
+```
+
+Or
+```
+cd /etc/ansible/ && ansible-playbook install_2.yml
+```
