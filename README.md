@@ -78,3 +78,12 @@ Or
 ```
 cd /etc/ansible/ && ansible-playbook install_2.yml
 ```
+Once the installation is done, you can check the cluster health using the following command line on ansible instance:
+
+``` 
+curl node6:9200/_cluster/health?pretty
+```
+Or in your browser by viewing the Kibana Interface
+```
+Http://localhost:6500
+```
