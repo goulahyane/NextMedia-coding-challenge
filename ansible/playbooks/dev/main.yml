@@ -15,6 +15,7 @@
       apt:
        name: default-jre
        state: present
+
 #installing elasticsearch on node1
 - hosts: elastic
   gather_facts: no
@@ -62,6 +63,7 @@
       service:
         name: elasticsearch
         state: started
+
 #intalling Kibana on node1
 - hosts: elastic
   gather_facts: no

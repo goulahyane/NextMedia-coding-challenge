@@ -1,0 +1,4 @@
+---
+#Default connectivity Vars 
+ansible_user: "root"
+ansible_password: "ansible"

@@ -3,16 +3,6 @@ node4
 node5
 node6
 
-
-[elastic]
-node1
-
-[logstash]
-node2
-
-[web]
-node3
-
 [master1]
 node4
 

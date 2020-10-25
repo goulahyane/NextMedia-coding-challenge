@@ -1,0 +1,12 @@
+[elastic]
+node1
+
+[logstash]
+node2
+
+[web]
+node3
+
+[all:vars]
+ansible_user=root
+ansible_password=ansible

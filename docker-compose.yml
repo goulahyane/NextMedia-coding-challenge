@@ -5,8 +5,7 @@ services:
       build: master/
       working_dir: /root/playbooks
       volumes:
-        - ${PWD}/playbooks:/root/playbooks
-        - ${PWD}/config:/etc/ansible
+        - ${PWD}/ansible:/etc/ansible
       command: tail -f /dev/null
       #command: ansible-playbook /etc/ansible/install.yml
       networks:
@@ -47,7 +46,7 @@ services:
           - challenge
       restart: always
       ports:
-        - "5602:5601"
+        - "5701:5601"
 
   node5:
       build: node/

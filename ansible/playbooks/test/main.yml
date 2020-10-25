@@ -3,7 +3,7 @@
   gather_facts: yes
 
   pre_tasks:
-    - name: update apt cache if needed
+    - name: Update apt cache if needed
       become: yes
       apt:
         update_cache=yes
@@ -16,7 +16,7 @@
        name: default-jre
        state: present
 
-#installing Elasticsearch on test master1
+#installing Elasticsearch on test master1 
 - hosts: master1
   gather_facts: no
 
@@ -45,28 +45,28 @@
         regexp: 'node.namel'
         line: 'node.name: master-1'
 
-    - name: Updating Elastic Config (Node role)
+    - name: Updating Elastic Config node master
       become: yes
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
         regexp: 'node.master'
         line: 'node.master: true'
 
-    - name: Updating Elastic Config (Node role)
+    - name: Updating Elastic Config node data
       become: yes
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
         regexp: 'node.data'
         line: 'node.data: true'
 
-    - name: Update Elastic Config
+    - name: Update Elastic Config host
       become: yes
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
         regexp: 'network.host'
         line: 'network.host: 0.0.0.0'
 
-    - name: Updating Elastic Config (Port Number)
+    - name: Updating Elastic Config port
       become: yes
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
@@ -80,14 +80,14 @@
         regexp: 'transport.tcp.port'
         line: 'transport.tcp.port: 9300'    
     
-    - name: Updating Elastic Config (TCP Port)
+    - name: Updating Elastic path data
       become: yes
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
         regexp: 'path.data'
         line: 'path.data: /var/lib/elasticsearch'    
     
-    - name: Updating Elastic Config (TCP Port)
+    - name: Updating Elastic path logs
       become: yes
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
@@ -95,14 +95,14 @@
         line: 'path.logs: /var/log/elasticsearch'    
     
 
-    - name: Update hosts config
+    - name: Update hosts config discovery
       become: yes
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
         regexp: 'discovery.seed_hosts'
         line: 'discovery.seed_hosts: ["node4", "node5", "node6"]'
 
-    - name: Updating master nodes
+    - name: Updating master initial nodes
       become: yes
       lineinfile:
         destfile: /etc/elasticsearch/elasticsearch.yml
